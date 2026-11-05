@@ -8,6 +8,9 @@ import {
   Radio, Clock, Music, ShoppingCart, AlertCircle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import PortfolioEntry from './components/PortfolioEntry';
+import ParticleTechStack from './components/ParticleTechStack';
+import BrandIcon from './components/BrandIcon';
 
 // Audio Synthesizer (Subtle mechanical click sounds)
 const playSynthSound = (type = 'click', muted = false) => {
@@ -65,7 +68,8 @@ export default function App() {
     'competitive_programming.json',
     'certifications.json',
     'maze_challenge.ts',
-    'about.html'
+    'about.html',
+    'tech_stack.tsx'
   ]);
 
   // Subtle Mouse Spotlight Coordinates
@@ -253,7 +257,8 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-[#08090C] text-slate-200 font-sans select-none overflow-hidden text-xs relative">
+    <PortfolioEntry>
+      <div className="h-screen w-screen flex flex-col bg-[#08090C] text-slate-200 font-sans select-none overflow-hidden text-xs relative">
       
       {/* SUBTLE LINEAR-STYLE MOUSE GLOW */}
       <div 
@@ -267,9 +272,9 @@ export default function App() {
       <div className="h-10 bg-[#0C0D11] border-b border-[#1A1C24] px-4 flex items-center justify-between z-30 font-mono">
         <div className="flex items-center space-x-3">
           <div className="flex space-x-1.5 mr-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#333742] inline-block"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-[#333742] inline-block"></span>
-            <span className="w-2.5 h-2.5 rounded-full bg-[#333742] inline-block"></span>
+            <span className="window-control window-control-close" aria-label="Close window" />
+            <span className="window-control window-control-minimize" aria-label="Minimize window" />
+            <span className="window-control window-control-maximize" aria-label="Maximize window" />
           </div>
 
           <div className="hidden lg:flex items-center space-x-4 text-[11px] text-slate-400">
@@ -290,7 +295,7 @@ export default function App() {
 
         {/* Right Controls */}
         <div className="flex items-center space-x-2">
-          <button 
+          <button
             onClick={() => { playSynthSound('click', muted); setMuted(!muted); }}
             className="p-1.5 rounded hover:bg-[#181A22] text-slate-400 hover:text-white transition"
             title="Audio Feedback"
@@ -358,6 +363,13 @@ export default function App() {
           >
             <Zap className="w-4 h-4" />
           </button>
+          <button
+            onClick={() => openFile('tech_stack.tsx')}
+            className={`p-2 rounded-md transition ${activeTab === 'tech_stack.tsx' ? 'text-white bg-[#151720]' : 'text-slate-500 hover:text-slate-300'}`}
+            title="Tech Stack"
+          >
+            <Sparkles className="w-4 h-4" />
+          </button>
         </div>
 
         {/* SIDEBAR EXPLORER */}
@@ -372,11 +384,11 @@ export default function App() {
 
             <div className="flex-1 overflow-y-auto py-2 px-1 text-[11px] space-y-0.5">
               
-              <div 
+              <div
                 onClick={() => openFile('home.tsx')}
                 className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'home.tsx' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
               >
-                <FileCode className="w-3.5 h-3.5 text-blue-400" />
+                <BrandIcon name="react" size={14} />
                 <span className="truncate">home.tsx</span>
               </div>
 
@@ -385,7 +397,7 @@ export default function App() {
                 onClick={() => openFile('projects.tsx')}
                 className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'projects.tsx' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
               >
-                <Code2 className="w-3.5 h-3.5 text-emerald-400" />
+                <BrandIcon name="react" size={14} />
                 <span className="truncate">projects.tsx</span>
               </div>
 
@@ -393,7 +405,7 @@ export default function App() {
                 onClick={() => openFile('competitive_programming.json')}
                 className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'competitive_programming.json' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
               >
-                <Flame className="w-3.5 h-3.5 text-amber-500" />
+                <BrandIcon name="json" size={14} />
                 <span className="truncate">cp_dossier.json</span>
               </div>
 
@@ -401,7 +413,7 @@ export default function App() {
                 onClick={() => openFile('certifications.json')}
                 className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'certifications.json' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
               >
-                <BadgeCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <BrandIcon name="json" size={14} />
                 <span className="truncate">certifications.json</span>
               </div>
 
@@ -409,7 +421,7 @@ export default function App() {
                 onClick={() => openFile('maze_challenge.ts')}
                 className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'maze_challenge.ts' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
               >
-                <Zap className="w-3.5 h-3.5 text-blue-400" />
+                <BrandIcon name="typescript" size={14} />
                 <span className="truncate">maze_challenge.ts</span>
               </div>
 
@@ -417,8 +429,16 @@ export default function App() {
                 onClick={() => openFile('about.html')}
                 className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'about.html' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
               >
-                <User className="w-3.5 h-3.5 text-slate-400" />
+                <BrandIcon name="html" size={14} />
                 <span className="truncate">about.html</span>
+              </div>
+
+              <div
+                onClick={() => openFile('tech_stack.tsx')}
+                className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'tech_stack.tsx' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
+              >
+                <BrandIcon name="react" size={14} />
+                <span className="truncate">tech_stack.tsx</span>
               </div>
 
               {/* Profiles Section */}
@@ -725,6 +745,13 @@ export default function App() {
                   </a>
                 </div>
 
+              </div>
+            )}
+
+            {/* TAB: tech_stack.tsx */}
+            {activeTab === 'tech_stack.tsx' && (
+              <div className="max-w-5xl mx-auto animate-fadeIn font-sans">
+                <ParticleTechStack />
               </div>
             )}
 
@@ -1042,7 +1069,10 @@ export default function App() {
                     >
                       <div>
                         <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-                          <span className="font-semibold text-white">LeetCode</span>
+                          <span className="flex items-center space-x-2 font-semibold text-white">
+                            <BrandIcon name="leetcode" size={18} />
+                            <span>LeetCode</span>
+                          </span>
                           <ExternalLink className="w-3.5 h-3.5 text-slate-600 group-hover:text-white transition" />
                         </div>
                         <div className="text-base font-bold text-white mb-0.5">@TUSHAR_CHAUDHARY_01</div>
@@ -1063,7 +1093,10 @@ export default function App() {
                     >
                       <div>
                         <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-                          <span className="font-semibold text-white">CodeChef</span>
+                          <span className="flex items-center space-x-2 font-semibold text-white">
+                            <BrandIcon name="codechef" size={18} />
+                            <span>CodeChef</span>
+                          </span>
                           <ExternalLink className="w-3.5 h-3.5 text-slate-600 group-hover:text-white transition" />
                         </div>
                         <div className="text-base font-bold text-white mb-0.5">@tushar_tcc</div>
@@ -1084,7 +1117,10 @@ export default function App() {
                     >
                       <div>
                         <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-                          <span className="font-semibold text-white">GeeksforGeeks</span>
+                          <span className="flex items-center space-x-2 font-semibold text-white">
+                            <BrandIcon name="geeksforgeeks" size={18} />
+                            <span>GeeksforGeeks</span>
+                          </span>
                           <ExternalLink className="w-3.5 h-3.5 text-slate-600 group-hover:text-white transition" />
                         </div>
                         <div className="text-base font-bold text-white mb-0.5">@tusharchauml4q</div>
@@ -1105,7 +1141,10 @@ export default function App() {
                     >
                       <div>
                         <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-                          <span className="font-semibold text-white">Codolio</span>
+                          <span className="flex items-center space-x-2 font-semibold text-white">
+                            <BrandIcon name="codolio" size={18} />
+                            <span>Codolio</span>
+                          </span>
                           <ExternalLink className="w-3.5 h-3.5 text-slate-600 group-hover:text-white transition" />
                         </div>
                         <div className="text-base font-bold text-white mb-0.5">@Tushar_Chaudhary_01</div>
@@ -1126,7 +1165,10 @@ export default function App() {
                     >
                       <div>
                         <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-                          <span className="font-semibold text-white">HackerRank</span>
+                          <span className="flex items-center space-x-2 font-semibold text-white">
+                            <BrandIcon name="hackerrank" size={18} />
+                            <span>HackerRank</span>
+                          </span>
                           <ExternalLink className="w-3.5 h-3.5 text-slate-600 group-hover:text-white transition" />
                         </div>
                         <div className="text-base font-bold text-white mb-0.5">@tusharchaudhar30</div>
@@ -1147,7 +1189,10 @@ export default function App() {
                     >
                       <div>
                         <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-                          <span className="font-semibold text-white">GitHub</span>
+                          <span className="flex items-center space-x-2 font-semibold text-white">
+                            <BrandIcon name="github" size={18} />
+                            <span>GitHub</span>
+                          </span>
                           <ExternalLink className="w-3.5 h-3.5 text-slate-600 group-hover:text-white transition" />
                         </div>
                         <div className="text-base font-bold text-white mb-0.5">@TusharChaudhary-tcc</div>
@@ -1515,6 +1560,7 @@ export default function App() {
         </div>
       </footer>
 
-    </div>
+      </div>
+    </PortfolioEntry>
   );
 }
