@@ -1,0 +1,27 @@
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #08090C;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1C1F28;
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3B82F6;
+  }
+}
+
+/* Sophisticated Developer Dot Grid (Linear / Raycast Style) */
+.bg-dev-grid {
+  background-color: #08090C;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
