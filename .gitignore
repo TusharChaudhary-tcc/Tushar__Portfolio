@@ -11,6 +11,13 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.*
+!.env.example
+.cache
+.vite
+coverage
+Tushar_Certificates_Portfolio_Assets/
 
 # Editor directories and files
 .vscode/*

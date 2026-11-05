@@ -40,7 +40,7 @@ export default function LockScreen({ onUnlock, isExiting = false }) {
         </div>
         <p className="lock-greeting">Welcome back</p>
         <h1>Tushar Chaudhary</h1>
-        <p className="lock-designation">Software Engineer</p>
+        <p className="lock-designation">Aspiring Software Developer</p>
         <div className="lock-clock" aria-live="polite">{formatTime(now)}</div>
         <p className="lock-date">{formatDate(now)}</p>
         <button className="unlock-button" type="button" onClick={onUnlock}>

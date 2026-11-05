@@ -2,15 +2,18 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   Terminal, Cpu, Code2, Folder, FileCode, Play, RotateCcw, Volume2, VolumeX, 
   ExternalLink, Github, Linkedin, Award, Activity, Search, Settings, 
-  GitBranch, ChevronRight, ChevronDown, CheckCircle2, Flame, Sparkles, 
+  GitBranch, ChevronRight, ChevronDown, CheckCircle2, Flame, Sparkles,
   Layers, Box, Send, X, Maximize2, Minimize2, Trophy, Zap, Shield,
-  ArrowRight, Compass, RefreshCw, User, FileText, Check, BadgeCheck,
+  ArrowRight, Compass, RefreshCw, User, FileText, Check, BadgeCheck, Menu,
   Radio, Clock, Music, ShoppingCart, AlertCircle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import PortfolioEntry from './components/PortfolioEntry';
 import ParticleTechStack from './components/ParticleTechStack';
 import BrandIcon from './components/BrandIcon';
+import CustomCursor from './components/CustomCursor';
+import CertificationsExplorer from './components/CertificationsExplorer';
+import ContactSection from './components/ContactSection';
 
 // Audio Synthesizer (Subtle mechanical click sounds)
 const playSynthSound = (type = 'click', muted = false) => {
@@ -65,11 +68,11 @@ export default function App() {
   const [openTabs, setOpenTabs] = useState([
     'home.tsx',
     'projects.tsx',
+    'tech_stack.tsx',
     'competitive_programming.json',
     'certifications.json',
-    'maze_challenge.ts',
     'about.html',
-    'tech_stack.tsx'
+    'contact.html'
   ]);
 
   // Subtle Mouse Spotlight Coordinates
@@ -244,6 +247,9 @@ export default function App() {
       setOpenTabs([...openTabs, tabName]);
     }
     setActiveTab(tabName);
+    if (window.matchMedia('(max-width: 760px)').matches) {
+      setSidebarOpen(false);
+    }
   };
 
   const closeTab = (tabName, e) => {
@@ -258,18 +264,18 @@ export default function App() {
 
   return (
     <PortfolioEntry>
-      <div className="h-screen w-screen flex flex-col bg-[#08090C] text-slate-200 font-sans select-none overflow-hidden text-xs relative">
+      <div className="portfolio-shell h-screen w-screen flex flex-col bg-[#08090C] text-slate-200 font-sans select-none overflow-hidden text-xs relative">
       
       {/* SUBTLE LINEAR-STYLE MOUSE GLOW */}
-      <div 
+      <div
         className="pointer-events-none fixed inset-0 z-0 transition-opacity duration-300"
         style={{
-          background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(59, 130, 246, 0.05), transparent 75%)`
+          background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(96, 165, 250, 0.08), transparent 75%)`
         }}
       />
 
       {/* 1. TOP TITLE BAR (VS CODE / RAYCAST MINIMALISM) */}
-      <div className="h-10 bg-[#0C0D11] border-b border-[#1A1C24] px-4 flex items-center justify-between z-30 font-mono">
+      <div className="top-title-bar h-10 bg-[#0C0D11] border-b border-[#1A1C24] px-4 flex items-center justify-between z-30 font-mono">
         <div className="flex items-center space-x-3">
           <div className="flex space-x-1.5 mr-2">
             <span className="window-control window-control-close" aria-label="Close window" />
@@ -280,7 +286,7 @@ export default function App() {
           <div className="hidden lg:flex items-center space-x-4 text-[11px] text-slate-400">
             <span className="text-white font-medium">Tushar Chaudhary</span>
             <span className="text-slate-600">/</span>
-            <span className="text-slate-400">Software Engineer</span>
+            <span className="text-slate-400">Aspiring Software Developer</span>
           </div>
         </div>
 
@@ -294,7 +300,15 @@ export default function App() {
         </div>
 
         {/* Right Controls */}
-        <div className="flex items-center space-x-2">
+        <div className="top-title-controls flex items-center space-x-2">
+          <button
+            className="mobile-explorer-toggle p-1.5 rounded hover:bg-[#181A22] text-slate-400 hover:text-white transition"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            aria-label={sidebarOpen ? 'Close Explorer' : 'Open Explorer'}
+            aria-expanded={sidebarOpen}
+          >
+            <Menu className="w-4 h-4" />
+          </button>
           <button
             onClick={() => { playSynthSound('click', muted); setMuted(!muted); }}
             className="p-1.5 rounded hover:bg-[#181A22] text-slate-400 hover:text-white transition"
@@ -324,10 +338,10 @@ export default function App() {
       </div>
 
       {/* 2. MAIN WORKSPACE */}
-      <div className="flex-1 flex overflow-hidden relative z-10 font-mono">
+      <div className="workspace-shell flex-1 flex overflow-hidden relative z-10 font-mono">
         
         {/* ACTIVITY BAR */}
-        <div className="w-12 bg-[#090A0D] border-r border-[#161820] flex flex-col items-center py-3 space-y-4 z-20">
+        <div className="activity-bar w-12 bg-[#090A0D] border-r border-[#161820] flex flex-col items-center py-3 space-y-4 z-20">
           <button 
             onClick={() => { playSynthSound('click', muted); setSidebarOpen(!sidebarOpen); }}
             className={`p-2 rounded-md transition ${sidebarOpen ? 'text-white bg-[#151720]' : 'text-slate-500 hover:text-slate-300'}`}
@@ -341,6 +355,13 @@ export default function App() {
             title="Projects (4 Live Systems)"
           >
             <Layers className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => openFile('tech_stack.tsx')}
+            className={`p-2 rounded-md transition ${activeTab === 'tech_stack.tsx' ? 'text-white bg-[#151720]' : 'text-slate-500 hover:text-slate-300'}`}
+            title="Tech Stack"
+          >
+            <Sparkles className="w-4 h-4" />
           </button>
           <button 
             onClick={() => openFile('competitive_programming.json')}
@@ -356,25 +377,11 @@ export default function App() {
           >
             <BadgeCheck className="w-4 h-4" />
           </button>
-          <button 
-            onClick={() => openFile('maze_challenge.ts')}
-            className={`p-2 rounded-md transition ${activeTab === 'maze_challenge.ts' ? 'text-white bg-[#151720]' : 'text-slate-500 hover:text-slate-300'}`}
-            title="Maze Game"
-          >
-            <Zap className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => openFile('tech_stack.tsx')}
-            className={`p-2 rounded-md transition ${activeTab === 'tech_stack.tsx' ? 'text-white bg-[#151720]' : 'text-slate-500 hover:text-slate-300'}`}
-            title="Tech Stack"
-          >
-            <Sparkles className="w-4 h-4" />
-          </button>
         </div>
 
         {/* SIDEBAR EXPLORER */}
         {sidebarOpen && (
-          <div className="w-56 bg-[#0B0C10] border-r border-[#161820] flex flex-col overflow-hidden text-xs">
+          <div className="sidebar-explorer w-56 bg-[#0B0C10] border-r border-[#161820] flex flex-col overflow-hidden text-xs">
             <div className="px-3 py-2 text-[10px] font-semibold tracking-wider text-slate-500 flex items-center justify-between border-b border-[#161820]">
               <span>EXPLORER</span>
               <button onClick={() => setSidebarOpen(false)} className="text-slate-600 hover:text-slate-300">
@@ -402,11 +409,19 @@ export default function App() {
               </div>
 
               <div 
+                onClick={() => openFile('tech_stack.tsx')}
+                className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'tech_stack.tsx' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
+              >
+                <BrandIcon name="react" size={14} />
+                <span className="truncate">tech_stack.tsx</span>
+              </div>
+
+              <div
                 onClick={() => openFile('competitive_programming.json')}
                 className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'competitive_programming.json' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
               >
                 <BrandIcon name="json" size={14} />
-                <span className="truncate">cp_dossier.json</span>
+                <span className="truncate">competitive_programming.json</span>
               </div>
 
               <div 
@@ -418,14 +433,6 @@ export default function App() {
               </div>
 
               <div 
-                onClick={() => openFile('maze_challenge.ts')}
-                className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'maze_challenge.ts' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
-              >
-                <BrandIcon name="typescript" size={14} />
-                <span className="truncate">maze_challenge.ts</span>
-              </div>
-
-              <div 
                 onClick={() => openFile('about.html')}
                 className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'about.html' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
               >
@@ -434,11 +441,11 @@ export default function App() {
               </div>
 
               <div
-                onClick={() => openFile('tech_stack.tsx')}
-                className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'tech_stack.tsx' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
+                onClick={() => openFile('contact.html')}
+                className={`flex items-center space-x-2 px-2.5 py-1.5 rounded cursor-pointer transition ${activeTab === 'contact.html' ? 'bg-[#151720] text-white font-medium' : 'text-slate-400 hover:bg-[#111319] hover:text-slate-200'}`}
               >
-                <BrandIcon name="react" size={14} />
-                <span className="truncate">tech_stack.tsx</span>
+                <BrandIcon name="html" size={14} />
+                <span className="truncate">contact.html</span>
               </div>
 
               {/* Profiles Section */}
@@ -500,10 +507,10 @@ export default function App() {
         )}
 
         {/* 3. CENTER EDITOR WORKSPACE */}
-        <div className="flex-1 flex flex-col bg-[#08090C] overflow-hidden">
+        <div className="editor-workspace flex-1 flex flex-col bg-[#08090C] overflow-hidden">
           
           {/* TABS HEADER */}
-          <div className="h-9 bg-[#0C0D11] border-b border-[#161820] flex items-center overflow-x-auto scrollbar-none">
+          <div className="editor-tabs h-9 bg-[#0C0D11] border-b border-[#161820] flex items-center overflow-x-auto scrollbar-none">
             {openTabs.map(tab => {
               const isActive = activeTab === tab;
               return (
@@ -536,7 +543,7 @@ export default function App() {
           </div>
 
           {/* TAB CONTENTS */}
-          <div className="flex-1 overflow-y-auto p-6 sm:p-10 font-sans">
+          <div className="editor-content flex-1 overflow-y-auto p-6 sm:p-10 font-sans">
 
             {/* TAB: home.tsx */}
             {activeTab === 'home.tsx' && (
@@ -576,7 +583,7 @@ export default function App() {
 
                     {/* Bio Statement */}
                     <p className="text-sm sm:text-base text-slate-400 max-w-2xl leading-relaxed pt-1">
-                      Software Engineer specialized in <strong className="text-white font-medium">full-stack web platforms</strong>, <strong className="text-white font-medium">algorithmic problem solving (220+ LeetCode)</strong>, and <strong className="text-white font-medium">cloud architecture on AWS</strong>. Dedicated to building reliable, high-throughput software with clean architecture and optimal performance.
+                      Aspiring Software Developer and second-year student at <strong className="text-white font-medium">ABES Engineering College</strong>, building practical projects while strengthening <strong className="text-white font-medium">full-stack development</strong>, <strong className="text-white font-medium">Data Structures and Algorithms</strong>, and <strong className="text-white font-medium">cloud technologies</strong>.
                     </p>
                   </div>
 
@@ -636,19 +643,19 @@ export default function App() {
                   </button>
 
                   <button 
-                    onClick={() => openFile('maze_challenge.ts')}
-                    className="flex items-center space-x-1.5 px-4 py-2 rounded-md bg-[#13151D] hover:bg-[#1A1D27] border border-[#20232F] text-slate-200 transition"
-                  >
-                    <Zap className="w-3.5 h-3.5 text-slate-300" />
-                    <span>Maze Challenge</span>
-                  </button>
-
-                  <button 
                     onClick={() => openFile('about.html')}
                     className="flex items-center space-x-1.5 px-4 py-2 rounded-md bg-[#13151D] hover:bg-[#1A1D27] border border-[#20232F] text-slate-200 transition"
                   >
                     <User className="w-3.5 h-3.5 text-slate-400" />
                     <span>About Me</span>
+                  </button>
+
+                  <button
+                    onClick={() => openFile('contact.html')}
+                    className="flex items-center space-x-1.5 px-4 py-2 rounded-md bg-[#13151D] hover:bg-[#1A1D27] border border-[#20232F] text-slate-200 transition"
+                  >
+                    <Send className="w-3.5 h-3.5 text-teal-400" />
+                    <span>Connect with me</span>
                   </button>
                 </div>
 
@@ -1209,7 +1216,10 @@ export default function App() {
             )}
 
             {/* TAB: certifications.json */}
-            {activeTab === 'certifications.json' && (
+            {activeTab === 'certifications.json' && <CertificationsExplorer />}
+
+            {/* Legacy certifications layout retained in source for reference. */}
+            {false && activeTab === 'certifications.json' && (
               <div className="max-w-4xl mx-auto space-y-6 animate-fadeIn font-sans">
                 <div className="p-6 rounded-xl bg-[#0D0E13] border border-[#181A23]">
                   <div className="flex items-center justify-between mb-4 pb-4 border-b border-[#181A23]">
@@ -1362,7 +1372,7 @@ export default function App() {
               </div>
             )}
 
-            {/* TAB: maze_challenge.ts */}
+            {/* Legacy maze implementation retained but no longer exposed by the default arcade flow. */}
             {activeTab === 'maze_challenge.ts' && (
               <div className="max-w-4xl mx-auto space-y-6 animate-fadeIn font-mono">
                 <div className="p-6 rounded-xl bg-[#0D0E13] border border-[#181A23]">
@@ -1506,34 +1516,114 @@ export default function App() {
 
             {/* TAB: about.html */}
             {activeTab === 'about.html' && (
-              <div className="max-w-4xl mx-auto space-y-6 animate-fadeIn font-sans">
-                <div className="p-6 rounded-xl bg-[#0D0E13] border border-[#181A23]">
-                  <div className="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-1">// BIO &amp; PHILOSOPHY</div>
-                  <h2 className="text-xl font-bold text-white mb-4">About Tushar Chaudhary</h2>
-                  <p className="text-sm text-slate-300 leading-relaxed mb-4">
-                    I am a software engineer focused on core computing principles: efficiency, reliability, and algorithmic rigor. Having solved over 220+ problems across LeetCode, CodeChef, and GeeksforGeeks, I analyze software not just by whether it works, but by how it behaves at scale.
-                  </p>
-                  <p className="text-sm text-slate-400 leading-relaxed mb-6">
-                    My engineering approach bridges low-level memory mechanics (C++/Java) with modern cloud scalability on AWS. Whether tuning lock contention or configuring automated CI/CD deployment pipelines on AWS Amplify, I build systems meant to endure high throughput without degradation.
-                  </p>
-
-                  <div className="flex flex-wrap gap-4 text-xs font-mono text-slate-400">
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>220+ LeetCode DSA Solutions</span>
+              <div className="about-profile animate-fadeIn font-sans">
+                <section className="about-hero">
+                  <div>
+                    <div className="about-kicker">// ABOUT ME / DEVELOPER PROFILE</div>
+                    <h2>Building Systems.<br />Solving Problems.<br /><span>Creating Impact.</span></h2>
+                    <div className="about-identity">
+                      <strong>Tushar Chaudhary</strong>
+                      <span>Aspiring Software Developer</span>
+                      <small>Second-Year Student | ABES Engineering College</small>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
-                      <span>AWS Cloud Practitioner Trainee</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-slate-300" />
-                      <span>Multithreaded Systems Developer</span>
-                    </div>
+                    <p className="about-lead">
+                      I am Tushar Chaudhary, a second-year student at ABES Engineering College with a strong interest in software development and problem-solving.
+                    </p>
+                    <p className="about-copy">
+                      I enjoy exploring how software works under the hood, writing efficient code, solving Data Structures and Algorithms problems, and building practical applications. My interests include Full Stack Development, Backend Engineering, Cloud Technologies, and Core Computer Science concepts. I believe in learning by building, experimenting, and continuously improving my technical skills.
+                    </p>
                   </div>
-                </div>
+                  <div className="about-hero-mark" aria-hidden="true">
+                    <Code2 />
+                    <span>BUILD / LEARN / ITERATE</span>
+                  </div>
+                </section>
+
+                <section>
+                  <div className="about-section-heading">
+                    <span>01</span>
+                    <h3>My Engineering Philosophy</h3>
+                  </div>
+                  <div className="about-philosophy-grid">
+                    {[
+                      { icon: Trophy, title: 'Problem Solving', items: ['Data Structures and Algorithms', 'Logical thinking', 'Algorithmic efficiency', 'Competitive programming'] },
+                      { icon: Code2, title: 'Software Development', items: ['Clean and maintainable code', 'Practical application development', 'Full Stack Development', 'Backend Engineering'] },
+                      { icon: Cpu, title: 'Technology and Cloud', items: ['Core Computer Science', 'Cloud Computing', 'AWS learning', 'Exploring modern technologies'] },
+                    ].map(({ icon: Icon, title, items }) => (
+                      <article className="about-philosophy-card" key={title}>
+                        <Icon className="about-card-icon" />
+                        <h4>{title}</h4>
+                        <ul>{items.map(item => <li key={item}><CheckCircle2 />{item}</li>)}</ul>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+
+                <section>
+                  <div className="about-section-heading">
+                    <span>02</span>
+                    <h3>Technical Interests</h3>
+                  </div>
+                  <div className="about-interest-groups">
+                    {[
+                      ['Languages', 'C++', 'Java', 'JavaScript'],
+                      ['Development', 'React', 'Full Stack Development', 'Backend Engineering'],
+                      ['Foundations', 'Data Structures and Algorithms', 'Core Computer Science', 'Cloud Technologies', 'AWS'],
+                    ].map(([category, ...items]) => (
+                      <div className="about-interest-group" key={category}>
+                        <span>{category}</span>
+                        <div>{items.map(item => <b key={item}>{item}</b>)}</div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="about-highlights">
+                  <div className="about-section-heading">
+                    <span>03</span>
+                    <h3>Achievements and Highlights</h3>
+                  </div>
+                  <div className="about-stat-grid">
+                    <div><strong>220+</strong><span>LeetCode problems solved</span></div>
+                    <div><strong>3+</strong><span>Competitive programming platforms</span></div>
+                    <div><strong>4</strong><span>Verified certifications</span></div>
+                    <div><strong>02</strong><span>Second-year student</span></div>
+                  </div>
+                </section>
+
+                <section>
+                  <div className="about-section-heading">
+                    <span>04</span>
+                    <h3>What I'm Currently Focused On</h3>
+                  </div>
+                  <div className="about-focus-list">
+                    {['Strengthening Data Structures and Algorithms', 'Building practical development projects', 'Improving Full Stack Development skills', 'Exploring Backend and Cloud Engineering', 'Learning Core Computer Science concepts'].map((item, index) => (
+                      <div key={item}><span>0{index + 1}</span><p>{item}</p><Activity /></div>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="about-goals">
+                  <div>
+                    <div className="about-kicker">// NEXT_DIRECTION</div>
+                    <h3>Learning with purpose, building for the future.</h3>
+                  </div>
+                  <p>I am interested in software development opportunities, technical internships, Full Stack and Backend projects, open-source collaboration, and continuous technical learning.</p>
+                </section>
+
+                <section className="about-connect">
+                  <div>
+                    <div className="about-kicker">// OPEN_TO_CONNECTIONS</div>
+                    <h3>Let's Build Something Together.</h3>
+                    <p>Have an interesting opportunity, project idea, or collaboration in mind? I'd love to connect.</p>
+                  </div>
+                  <button onClick={() => openFile('contact.html')}><Send />Connect With Me<ArrowRight /></button>
+                </section>
               </div>
             )}
+
+            {/* TAB: contact.html */}
+            {activeTab === 'contact.html' && <ContactSection />}
 
           </div>
 
@@ -1561,6 +1651,7 @@ export default function App() {
       </footer>
 
       </div>
+      <CustomCursor />
     </PortfolioEntry>
   );
 }
